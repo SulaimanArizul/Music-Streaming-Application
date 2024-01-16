@@ -1,0 +1,37 @@
+{% extends 'user_layout.html' %}
+{% block content %}
+<div class='recommend-songs border border-success-subtle p-2 border-opacity-10'>
+  <h4>recommend songs</h4>
+  <div class="horizontal-swipe">
+    {% for song in songs %}
+      <div class='item'>
+        <h4>{{song.song_name}}</h4>
+        <h6>{{song.artist}}</h6>
+      </div> 
+    {% endfor %}
+  </div>    
+</div>
+<div class='playlist border border-success-subtle p-2 border-opacity-10'>
+  <h4>Playlist</h4>
+  <div class="horizontal-swipe">
+    {% for song in songs %}
+      <div class='item'>
+        <h4>{{song.song_name}}</h4>
+        <h6>{{song.artist}}</h6>
+      </div> 
+    {% endfor %}
+  </div>
+</div>
+<div class='genre border border-success-subtle p-2 border-opacity-10'>
+  <h4>Genre</h4>
+  <div class="horizontal-swipe">
+    {% for song in songs %}
+      <div class='item'>
+        <h4>{{song.song_name}}</h4>
+        <h6>{{song.artist}}</h6>
+      </div> 
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'user_layout.html' %}
+{% block content %}
+<div class='content'>
+  <div class='container-sm p-3 mb-2 bg-secondary text-white'>
+    <form method='post' action='' class='container-md'>
+        <h3><small class="text-body-secondary">Welcome to</small> Login Page
+        </h3>
+        <div class="mb-3" >
+          <label for="Email" class="form-label">Email address</label>
+          <input type='email' name='email'  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required/>
+        </div>
+        <div class="mb-3">
+          <label for="Password" class="form-label">Password</label>
+          <input type="password" name='password'class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3">
+          <button type='submit'  class="btn btn-primary">login</button>
+        </div>
+    </form>
+  </div>  
+</div>
+{% endblock %}
