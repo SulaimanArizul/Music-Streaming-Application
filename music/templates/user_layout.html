@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
-
+    
   </head>
   <body>
     <header class="site-header">
@@ -27,27 +27,27 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-              <a class="nav-item nav-link" href="/login">Logout</a>
-              <a class="nav-item nav-link" href="/creator">Register</a>
+              {% if current_user.is_authenticated %}
+                <a class="nav-item nav-link" href="/logout">Logout</a>
+              <a class="nav-item nav-link" href="/user/profile">profile</a>
+              {% else %}
+                <a class="nav-item nav-link" href="/login">Login</a>
+              <!-- <a class="nav-item nav-link" href="/creator">a</a> -->
+              {% endif %}
             </div>
           </div>
         </div>
       </nav>
     </header>
-    <div class="container">
-      <div name='welcome'>
-        <h1>Welcome to this application</h1>
-      </div>
-      <div name='choose'>
-        <form action="{{ url_for('login') }}" method="post">
-          <button type="submit" name="login_type" value="user">User Login</button>
-          <button type="submit" name="login_type" value="creator">Creator Login</button>
-        </form>
-      </div>
-    </div>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-8">
+    {% block content %}
+    {% endblock %}
+     <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
-  

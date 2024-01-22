@@ -1,0 +1,26 @@
+{% extends 'user_layout.html' %}
+{% block content %}
+<div>
+  <h1>Register</h1>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          {% for category, message in messages %}
+              <div class="flash {{ category }} alert alert-primary">{{ message }}</div>
+          {% endfor %}
+      {% endif %}
+  {% endwith %}
+  <form action="/register" method="post">
+      <label for="username" class='form-label'>Username:</label><br>
+      <input type="text" id="username" name="username" class="form-control"  required><br>
+
+      <label for="email" class='form-label'>Email:</label><br>
+      <input type="email" id="email" name="email" class="form-control"  required><br>
+
+      <label for="password" class='form-label'>Password:</label><br>
+      <input type="password" id="password" name="password" class="form-control"  required><br>
+
+      <input type="submit" value="Submit">
+  </form>
+</div>
+
+{% endblock %}

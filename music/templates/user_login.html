@@ -2,9 +2,16 @@
 {% block content %}
 <div class='content'>
   <div class='container-sm p-3 mb-2 bg-secondary text-white'>
-    <form method='post' action='' class='container-md'>
+    <form method='post' action='/user/login' class='container-md'>
         <h3><small class="text-body-secondary">Welcome to</small> Login Page
         </h3>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              {% for category, message in messages %}
+                  <div class="flash {{ category }} alert alert-primary">{{ message }}</div>
+              {% endfor %}
+          {% endif %}
+      {% endwith %}
         <div class="mb-3" >
           <label for="Email" class="form-label">Email address</label>
           <input type='email' name='email'  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required/>
