@@ -1,34 +1,72 @@
-from flask import render_template, url_for, flash, redirect, request
+from sqlalchemy import func
+from flask import render_template, url_for, flash, redirect, request,abort
 from music import app,db,bcrypt
-from music.models import User,Song,Creator,Album 
+from music.models import User, Song, Creator,Album, Playlist, Rating
 from flask_login import login_user,current_user,logout_user,login_required
-
-Songs=[
-  {
-    'song_name':'song1',
-    'artist':'artist1'
-  },
-  {
-    'song_name':'song2',
-    'artist':'artist2'
-  },
-  {
-    'song_name':'song3',
-    'artist':'artist3'
-  },
-  {
-    'song_name':'song4',
-    'artist':'artist4'
-  },
-  {
-    'song_name':'song5',
-    'artist':'artist5'
-  }
-]
+import os
+import secrets
+from pydub import AudioSegment
+import ffmpeg
 
 
-@app.route('/')
+
+
+@app.route('/',methods=('GET','POST'))
 def home():
+  user_song = []
+
+  if current_user.is_authenticated:
+      total = Playlist.query.filter_by(user=current_user.id).all()
+      song_ids = {playlist.songs for playlist in total}
+      user_song = Song.query.filter(Song.id.in_(song_ids)).all()
+  if request.method=='POST':
+    song_id=request.form.get('song_id')
+    song_now=request.form.get('play')
+    play=Song.query.filter_by(id=song_now).first()
+    liked=request.form.get('liked')
+    rate=request.form.get('rate')
+    if play:
+      Songs = Song.query.all()
+      return render_template('home.html',songs=Songs,
+                               stream=play,user_song=user_song)
+    if liked and current_user.is_authenticated:
+      user_id=current_user.id
+      songid=liked
+      addplaylist=Playlist(user=user_id,songs=songid)
+      db.session.add(addplaylist)
+      db.session.commit()
+    if rate:
+      user_id=current_user.id
+      song_id=request.form.get('hidden_song_id')
+      rating=rate
+      existing_rating = Rating.query.filter_by(user=user_id, song=song_id).first()
+
+      if existing_rating:
+          # User has already rated this song
+        flash('You have already rated this song.')  
+      else:  
+        addRating=Rating(user=user_id, song=song_id, rating=rating)
+        db.session.add(addRating)
+        db.session.commit()
+        average_rate = db.session.query(func.avg(Rating.rating)).filter(Rating.song == song_id).scalar()
+        rounded_average = round(average_rate, 1)
+        # Fetch the song from the database
+        song_to_update = Song.query.get(song_id)
+        if song_to_update:
+            # Update the rating
+            song_to_update.rating = rounded_average
+            # Commit the changes to the database
+            db.session.commit()
+    
+      
+  Songs = Song.query.all()
+  if current_user.is_authenticated:
+    # user_song=Playlist.query(Playlist.songs).filter_by(user=current_user.id).all()
+    total=Playlist.query.filter_by(user=current_user.id).all()
+    song_ids = {playlist.songs for playlist in total}
+    user_song = Song.query.filter(Song.id.in_(song_ids)).all()
+    # user_songs=[x for x in total.song]
+    return render_template('home.html',songs=Songs,user_song=user_song)
   return render_template('home.html',songs=Songs)
 
 @app.route('/user/login', methods=['GET', 'POST'])
@@ -57,28 +95,45 @@ def login():
     login_type = request.form.get('login_type')
     if login_type == 'user':
       return redirect(url_for('user_login'))
-    elif login_type == 'creator':
-      return redirect(url_for('creator_login'))
+    # elif login_type == 'creator':
+    #   return redirect(url_for('creator_login'))
   return render_template('login.html')
 
 
 @app.route('/creator/login', methods=['GET', 'POST'])
-def creator_login():
+@login_required
+def creator_login():  
   if request.method == 'POST':
     creator_login = request.form.get('creator-login')
     if creator_login:
+      current_user.iscreator=True
+      id=current_user.id
+      cusername=current_user.username
+      cemail=current_user.email
+      cpassword=current_user.password
+      creator=Creator(id=id,name=cusername,email=cemail,password=cpassword)
+      db.session.add(current_user)
+      db.session.add(creator)
+      db.session.commit()
       flash('logined in successfully!','success')
       return redirect(url_for('creator'))
   return render_template('creator_login.html')
 
 @app.route('/creator')
+@login_required
 def creator():
-  return render_template('creator.html')
+  mysong=Song.query.filter_by(artist=current_user.id).all()
+  artistname=current_user.username
+  return render_template('creator.html',mysong=mysong,artistname=artistname)
 
 @app.route('/user/profile')
 @login_required
 def user_profile():
-  return render_template('user_profile.html')
+  if current_user.iscreator:
+    image=url_for('static',filename='profile_pic/creator_image.jpg')
+  else:
+    image=url_for('static',filename='profile_pic/user_image.jpg')
+  return render_template('user_profile.html',image=image)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -112,3 +167,119 @@ def logout():
   logout_user()
   flash('logged out successfully!')
   return redirect(url_for('home'))
+
+def save_song(song_file):
+  random_hex=secrets.token_hex(8)
+  _,f_ext=os.path.splitext(song_file.filename)
+  song_n=random_hex+f_ext
+  song_path=os.path.join(app.root_path,'static/saved_songs'
+                         ,song_n)
+  song_file.save(song_path)
+  return song_n
+  
+  
+@app.route('/creator/upload', methods=['GET', 'POST'])
+@login_required
+def creator_upload():
+  if request.method == 'POST':
+    name=request.form.get('title')
+    genre=request.form.get('genre')
+    artist=current_user.id
+    album=request.form.get('album_name')
+    song_file=request.files.get('file')
+    saved_song=save_song(song_file)
+    song_path=os.path.join(app.root_path,'static/saved_songs'
+       ,saved_song)
+    album1=Album.query.filter_by(name=album).first()
+    if album1:
+      song=Song(title=name,artist=artist,genre=genre,
+        album_id=album1.id,file=saved_song)
+      db.session.add(song)
+      db.session.commit()
+    else:  
+      album=Album(name=album,artist=artist)
+      db.session.add(album)
+      db.session.commit()
+      song=Song(title=name,artist=artist,genre=genre,
+        album_id=album.id,file=saved_song)
+      db.session.add(song)
+      db.session.commit()
+    return redirect(url_for('creator'))  
+  return render_template('creator_upload.html')
+
+@app.route('/creator/update/<int:song_id>', methods=['GET','POST'])
+@login_required
+def creator_update(song_id):
+  song = Song.query.get_or_404(song_id)
+  
+  if current_user.id != song.artist:
+      abort(403)
+  
+  if request.method == 'POST':
+      title = request.form.get('title')
+      genre = request.form.get('genre')
+      songfile = request.files.get('file')
+      album=request.form.get('album_name')
+  
+      # Update the title and genre if they are provided
+      if title:
+          song.title = title
+      if genre:
+          song.genre = genre
+
+      if album:
+        song.album_id = album
+  
+      # Update the file only if a new file is uploaded
+      if songfile:
+          saved_song = save_song(songfile)
+          song.file = saved_song
+  
+      db.session.commit()
+      return redirect(url_for('creator', song_id=song.id))
+  
+  return render_template('creator_update.html', song=song)
+
+@app.route('/creator/delete/<int:song_id>', methods=['GET', 'POST'])
+@login_required
+def creator_delete(song_id):
+  song=Song.query.get_or_404(song_id)
+  if current_user.id != song.artist:
+    abort(403)
+  db.session.delete(song)
+  db.session.commit()
+  flash('Your song has been deleted!', 'success')
+  return redirect(url_for('creator'))
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+  admimemail='23dp1000004@ds.study.iitm.ac.in'
+  adminpassword='admin'
+  if request.method == 'POST':
+    email=request.form.get('email')
+    password=request.form.get('password')
+    user=User.query.filter_by(email=email).first()
+    if email==admimemail and password==adminpassword and user:
+      flash('you have logged-in in successfully!','success')
+      return redirect(url_for('admin'))
+    else:
+      if email!=admimemail:
+        flash('invalid email','danger')
+      if password!=adminpassword:
+        flash(f'invalid password','danger')
+      return redirect(url_for('admin_login'))  
+  return(render_template('admin_login.html'))  
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+  songs=Song.query.all()
+  
+  return render_template('admin.html',mysong=songs)
+      
+@app.route('/admin/delete/<int:song_id>', methods=['GET', 'POST'])
+def admin_delete(song_id):
+  song=Song.query.get_or_404(song_id)
+  db.session.delete(song)
+  db.session.commit()
+  flash('Your song has been deleted!', 'success')
+  return redirect(url_for('admin'))

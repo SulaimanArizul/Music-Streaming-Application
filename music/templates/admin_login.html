@@ -1,9 +1,9 @@
-{% extends 'user_layout.html' %}
+{% extends 'admin_layout.html' %}
 {% block content %}
 <div class='content'>
   <div class='container-sm p-3 mb-2 bg-secondary text-white'>
-    <form method='post' action='/user/login' class='container-md'>
-        <h3><small class="text-body-secondary">Welcome to</small> Login Page
+    <form method='post' action='/admin/login' class='container-md'>
+        <h3><small class="text-body-secondary">Welcome to</small> Admin Page
         </h3>
         <div class="mb-3" >
           <label for="Email" class="form-label">Email address</label>
@@ -19,4 +19,5 @@
     </form>
   </div>  
 </div>
+
 {% endblock %}

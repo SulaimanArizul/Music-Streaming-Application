@@ -1,0 +1,35 @@
+{% extends 'creator_layout.html' %}
+{% block content %}
+<div class='container-sm p-3 mb-2 bg-secondary text-white'>
+  <form method='post' action='/creator/upload' enctype='multipart/form-data' class='container-md'>
+      <h3><small class="text-body-secondary">Welcome to</small> Upload page
+      </h3>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }} alert alert-primary">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+      <div class="mb-3" >
+        <label for="Song name" class="form-label">Song name </label>
+        <input type='text' name='title'  class="form-control" id="SongName" required/>
+      </div>
+      <div class="mb-3" >
+        <label for="genre" class="form-label">Song genre</label>
+        <input type='text' name='genre' class="form-control" id="SongGenre" required/>
+      </div>
+      <div class="mb-3">
+        <label for="Album" class="form-label">Album</label>
+        <input type="text" name='album_name'class="form-control" id="Albumname" required/>
+      </div>
+      <div class="mb-3" >
+        <label for="file" class="form-label">Upload the Song</label>
+        <input type='file' name='file'  class="form-control" id="SongFile" accept=".mp3, .wav, .aac, .flac"required/>
+      </div>
+      <div class="mb-3">
+        <button type='submit'  class="btn btn-primary">upload</button>
+      </div>
+  </form>
+</div>
+{% endblock %}

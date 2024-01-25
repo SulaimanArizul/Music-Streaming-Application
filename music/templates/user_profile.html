@@ -2,13 +2,40 @@
 {% block content %}
 <div class="content-section">
   <div class="media">
-    <img class="rounded-circle account-img" src="userimage.jpg">
+    <img class="rounded-circle account-img" src={{image}}>
     <div class="media-body">
       <h2 class="account-heading">{{current_user.username}}</h2>
+      {% if current_user.iscreator %}
+        <p class="text-secondary">Creator</p>
+      {% else %}
+        <p class="text-secondary">User</p>
+      {% endif %}
       <p class="text-secondary">{{current_user.email}}</p>
+      
+      
     </div>
   </div>
-  <!-- FORM HERE -->
+    <form method='post' action='/user/profile' class='container-md'>
+        <h3><small class="text-body-secondary">UPDATE</small></h3>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              {% for category, message in messages %}
+                  <div class="flash {{ category }} alert alert-primary">{{ message }}</div>
+              {% endfor %}
+          {% endif %}
+      {% endwith %}
+        <div class="mb-3" >
+          <label for="Username" class="form-label">Username</label>
+          <input type='username' name='username' class="form-control"  aria-describedby="emailHelp" placeholder="{{current_user.username}}" required/>
+        </div>
+        <div class="mb-3">
+      <label for="Email" class="form-label">Email address</label>
+      <input type='email' name='email'  class="form-control" aria-describedby="emailHelp" placeholder="{{current_user.email}}" required/>
+        <div class="mb-3">
+        </br>
+          <button type='submit'  class="btn btn-primary">update</button>
+        </div>
+    </form>
 </div>
 
 {% endblock %}

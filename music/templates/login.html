@@ -17,6 +17,7 @@
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
           <a class="navbar-brand mr-4" href="#">OREO</a>
+          <a class="nav-item nav-link" href="{{url_for('admin_login')}}">Admin</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -43,8 +44,8 @@
       </div>
       <div name='choose'>
         <form action="{{ url_for('login') }}" method="post">
-          <button type="submit" name="login_type" value="user">User Login</button>
-          <button type="submit" name="login_type" value="creator">Creator Login</button>
+          <button type="submit" name="login_type" value="user">Login</button>
+          <!-- <button type="submit" name="login_type" value="creator">Creator Login</button> -->
           <h4>if you are new to this application,</br></h4> <a href='/register'>Create new account</a>
         </form>
       </div>

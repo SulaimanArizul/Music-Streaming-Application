@@ -114,3 +114,12 @@ html {
 .overflow-auto {
     overflow-x: auto;
 }
+
+.bg-golden {
+    background-color:		#008080; 
+}
+audio {
+    width: 100%;
+    min-width:50px;
+}
+
