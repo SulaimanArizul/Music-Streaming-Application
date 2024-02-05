@@ -96,12 +96,13 @@ html {
 
 .item {
   flex: 0 0 auto;
-  width: 120px; /* Width of each item */
+  width: 160px; /* Width of each item */
   margin-right: 10px;
   background-color: #f0f0f0;
   border: 1px solid #ddd;
-  padding: 20px;
-  text-align: center;
+  padding: 5px;
+  height: 160 px;
+  /* text-align: center; */
 }
 
 /* Optional: Add some styling for touch devices */
@@ -122,4 +123,54 @@ audio {
     width: 100%;
     min-width:50px;
 }
+
+.lyrics-textarea{
+  overflow: auto;
+}
+
+/* CSS for the sidebar content */
+.content-section {
+  background-color: #f8f9fa; /* Light gray background */
+  border: 1px solid #dee2e6; /* Border around the box */
+  padding: 20px; /* Padding inside the box */
+  border-radius: 5px; /* Rounded corners */
+}
+
+/* Styling for song details */
+.song-details {
+  margin-bottom: 20px; /* Spacing between song details and other content */
+}
+
+.song-details h6 {
+  font-weight: bold; /* Make song title bold */
+}
+
+.song-details p {
+  font-size: 14px; /* Make artist name a little smaller */
+  color: #6c757d; /* Gray color for artist name */
+  max-height: calc(1.2em * 5); 
+  overflow-y: auto;
+}
+
+.lyrics {
+  overflow-y: auto; /* Allow vertical scrolling if lyrics exceed height */
+  max-height: 100px; /* Limit the height of the lyrics box */
+}
+
+/* Audio player styling */
+audio {
+  width: 100%; /* Make audio player full-width */
+}
+
+.rate-button{
+  padding: 0.20rem 0.10rem;
+  font-size: 0.002rem;
+  line-height: .5;
+  border-radius: 0.2rem;
+}
+
+.playbutton{
+  margin-right: 0.100rem;
+}
+
 

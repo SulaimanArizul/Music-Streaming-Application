@@ -1,11 +1,8 @@
 {% extends 'creator_layout.html' %}
 {% block content %}
 <div>
-  this is creator account
-</div>
-<div>
   {% if current_user.id %}
-  <a href='/creator/upload'>Upload new song</a>
+  <p><a href='/creator/upload' class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Upload new song</a></p>
   {% endif %}
   {% for songs in mysong %}
   <div class='container-sm p-3 mb-2 bg-secondary text-white'>

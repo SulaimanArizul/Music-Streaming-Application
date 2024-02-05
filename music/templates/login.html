@@ -17,7 +17,10 @@
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
           <a class="navbar-brand mr-4" href="#">OREO</a>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
           <a class="nav-item nav-link" href="{{url_for('admin_login')}}">Admin</a>
+              </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -40,13 +43,14 @@
     {% endwith %}
     <div class="container">
       <div name='welcome'>
-        <h1>Welcome to this application</h1>
+        <h1 class='display-1'>Welcome to OREO</h1>
       </div>
       <div name='choose'>
         <form action="{{ url_for('login') }}" method="post">
-          <button type="submit" name="login_type" value="user">Login</button>
+          <button type="submit" name="login_type" value="user" class='btn btn-primary lead'>LOGIN</button></br>
           <!-- <button type="submit" name="login_type" value="creator">Creator Login</button> -->
-          <h4>if you are new to this application,</br></h4> <a href='/register'>Create new account</a>
+        </br>
+          <h4 class='lead'>if you are new to this application,<a href='/register'>Create new account</a></h4>
         </form>
       </div>
     </div>

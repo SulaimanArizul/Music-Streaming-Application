@@ -1,11 +1,54 @@
 {% extends 'admin_layout.html' %}
 {% block content %}
- {% for songs in mysong %}
+<div class='admin_content'>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card bg-light mb-3">
+        <div class="card-header">Number of Users</div>
+        <div class="card-body">
+          <h5 class="card-title">{{ totaluser }}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card bg-light mb-3">
+        <div class="card-header">Number of Songs</div>
+        <div class="card-body">
+          <h5 class="card-title">{{ totalsong }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div>
+<div class='admin_content'>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card bg-light mb-3">
+        <div class="card-header">Number of Artist</div>
+        <div class="card-body">
+          <h5 class="card-title">{{ totalartist }}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card bg-light mb-3">
+        <div class="card-header">Number of album</div>
+        <div class="card-body">
+          <h5 class="card-title">{{ totalalbum }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ {% for songs in songs %}
  <div class='container-sm p-3 mb-2 bg-secondary text-white'>
    <h4>{{ songs.title }}</h4>
    <h5>{{ artistname }}</h5>
    <p>{{songs.rating}}</p>
-   <a name='update' class='btn btn-secondary btn-sm mt-1 mb-1' href="{{url_for('creator_update',song_id=songs.id)}}">Update</a>
    <button type='button' class='btn btn-danger btn-sm m-1'data-toggle="modal" data-target="#deleteModal">Delete</button>
  </div>
 

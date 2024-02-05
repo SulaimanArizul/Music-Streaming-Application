@@ -32,6 +32,8 @@ class Song(db.Model):
   rating=db.Column(db.Integer,default=0)
   duration=db.Column(db.Integer,nullable=False,default=0)
 
+  creator = db.relationship('Creator', backref='songs')
+
   def __repr__(self):
      return f"Song('{self.title}','{self.artist}','{self.album}')"
 

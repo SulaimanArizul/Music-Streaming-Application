@@ -1,7 +1,7 @@
 {% extends 'creator_layout.html' %}
 {% block content %}
 <div class='container-sm p-3 mb-2 bg-secondary text-white'>
-  <form method='post' action='{{ url_for('creato_update', song_id=song.id) }}' enctype='multipart/form-data' class='container-md'>
+  <form method='post' action='{{ url_for('creator_update', song_id=song.id) }}' enctype='multipart/form-data' class='container-md'>
       <h3><small class="text-body-secondary">Welcome to</small> Update page
       </h3>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -22,6 +22,10 @@
       <div class="mb-3">
         <label for="Album" class="form-label">Album</label>
         <input type="text" name='album_name'class="form-control" id="Albumname" required/>
+      </div>
+      <div class="mb-3">
+        <label for="Lyrics" class="form-label">Lyrics</label>
+        <textarea type="text" name='lyrics' class="form-control lyrics-textarea" id="lyrics" rows='5' required/></textarea>
       </div>
       <div class="mb-3" >
         <label for="file" class="form-label">Upload the Song</label>

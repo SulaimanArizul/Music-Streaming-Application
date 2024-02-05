@@ -33,6 +33,10 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
+              <form method="POST" action="{{ url_for('user_search')}}" class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+              </form>
                 <a class="nav-item nav-link" href="/logout">Logout</a>
               <a class="nav-item nav-link" href="/user/profile">profile</a>
               {% else %}
@@ -59,26 +63,6 @@
     {% block content %}
     {% endblock %}
           </div>
-              <div class="col-md-4">
-                <div class="content-section">
-                  <h3>Our Sidebar</h3>
-                  <p class='text-muted'>You can put 
-                    any information here you'd like.
-                  </p>
-                  {% if stream %}
-                      <h4>{{stream.title}}</h4>
-                      <p>{{stream.artist}}</p>
-                      <p>this with contain the lyrics of the song</p>
-                      <p>here should be the play and pause button</p>
-                      <audio controls class="w-100">
-                          <source src="{{ url_for('static', filename='saved_songs/'+stream.file) }}" type="audio/mpeg">
-                          Your browser does not support the audio element.
-                      </audio>
-                  {% else %}
-                      <p>select the song.</p>
-                  {% endif %}
-                </div>
-              </div>
             </div>
           </main>
      <!-- Optional JavaScript -->
